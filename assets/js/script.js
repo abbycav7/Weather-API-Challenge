@@ -121,3 +121,41 @@ var saveLocation = function(location) {
     // update the search history
     createSearchHistoryElement(cityData);
 }
+var getCoordinates = function(searchTerm) {
+    /* use the mapquest API to geocode the location based on the search terms */
+
+    searchTerm = searchTerm.split(" ").join("+");
+    var geocodingApiUrl = "https://www.mapquestapi.com/geocoding/v1/address?key=ZJUiXdZZzhsEe05eUGvmmAsIoTPvQOHn&location=" + searchTerm;
+    fetch(geocodingApiUrl).then(function(res) {
+        if (res.ok) {
+            res.json().then(function(data) {
+
+                // find one location to use to generate the weather
+                var locations = data.results[0].locations;
+                if (locations.length == 1) {
+                    saveLocation(locations[0]);
+                    getWeather(locations[0].latLng);
+                } else {
+                    confirmLocation(locations);  // prompt the user to confirm the location
+                }
+            })
+        } else {
+            console.log("Couldn't get the coordinates from the mapquest API: ", res.text);
+        }
+    });
+}
+var getWeather = function(coords) {
+    /* make the api call to get the weather based on a set of coordinates {lat: x, lng: y} */
+
+    var weatherApiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + coords.lat + "&lon=" + coords.lng + "&units=imperial&exclude=minutely,hourly&appid=3efc587005200cdf1f242650ff091998";
+    fetch(weatherApiUrl).then(function(res){
+        if (res.ok) {
+            res.json().then(function(data){
+                displayWeather(data);  // display the current weather and forecast
+            })
+        } else {
+            console.log("Couldn't get the weather data from the openweathermap API: ", res.text);
+        }
+    })
+}
+
