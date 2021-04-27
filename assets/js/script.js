@@ -313,3 +313,39 @@ var searchButtonHandler = function(event) {
         searchInput.value = "";
     }
 }
+var searchHistoryHandler = function(event) {
+    if (event.target.classList.contains("search-history-item")) {
+        var searchedCity = event.target.getAttribute("data-location-name");
+        getCoordinates(searchedCity);
+    }
+}
+
+var confirmLocationHandler = function(event){
+    event.preventDefault();
+
+    // figure out whether the user has chosen a location
+    var confirmedLocation;
+    var radioButtons = document.getElementsByName("search-result");
+    for (var i=0; i < radioButtons.length; i++) {
+        if (radioButtons[i].checked) {
+            confirmedLocation = JSON.parse(radioButtons[i].getAttribute("data-location"));
+        }
+    }
+
+    // if they chose a location, display the weather
+    if (confirmedLocation) {
+        UIkit.modal("#confirm-location-modal").hide();
+        saveLocation(confirmedLocation);
+        getWeather(confirmedLocation.latLng)
+        confirmLocationModal.querySelector("#confirm-location-form-message").classList.remove("uk-text-primary");
+    }
+    else {  // otherwise, let the user know they're missing a response.
+        confirmLocationModal.querySelector("#confirm-location-form-message").classList.add("uk-text-primary");
+    }
+}
+
+// event handlers and on load
+displaySearchHistory();
+searchButton.addEventListener("click", searchButtonHandler)
+searchHistoryItems.addEventListener("click", searchHistoryHandler);
+confirmLocationModal.addEventListener("submit", confirmLocationHandler);
