@@ -8,7 +8,7 @@ Overall this was a difficult project, but one that was fun to show off once fini
 
 ## Site Location
 
-[Site Location](https://abbycav7.github.io/js-code-quiz/)
+[Site Location](https://abbycav7.github.io/Weather-API-Challenge/)
 
 ## Site Image
 ![Site Image](./assets/css/images/screenshot-1.png)
