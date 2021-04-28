@@ -1,4 +1,4 @@
-# JavaScript Code Quiz
+# Weather API Challenge 
 
 ## Description 
 
